@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kundenkommentare löschen</title>
+    <style>
+        .review {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+        .warning {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Kundenkommentare</h1>
+    
+    <!-- Passwortbereich -->
+    <div id="password-section">
+        <label for="password">Admin-Passwort:</label>
+        <input type="password" id="password">
+        <button onclick="checkPassword()">Login</button>
+        <p id="login-warning" class="warning hidden">Falsches Passwort!</p>
+    </div>
+
+    <!-- Kommentarliste -->
+    <div id="review-section" class="hidden">
+        <div class="review" id="review1">
+            <strong>Benutzer 1:</strong>
+            <p>Tolle Erfahrung!</p>
+            <button onclick="deleteComment('review1')">Löschen</button>
+        </div>
+        <div class="review" id="review2">
+            <strong>Benutzer 2:</strong>
+            <p>Sehr zufrieden!</p>
+            <button onclick="deleteComment('review2')">Löschen</button>
+        </div>
+        <div class="review" id="review3">
+            <strong>Benutzer 3:</strong>
+            <p>Kann ich nur empfehlen!</p>
+            <button onclick="deleteComment('review3')">Löschen</button>
+        </div>
+    </div>
+
+    <script>
+        // Festgelegtes Passwort
+        const adminPassword = "admin123"; // Ändere hier das Passwort
+
+        // Passwortprüfung
+        function checkPassword() {
+            const enteredPassword = document.getElementById('password').value;
+            const warning = document.getElementById('login-warning');
+            if (enteredPassword === adminPassword) {
+                document.getElementById('password-section').classList.add('hidden');
+                document.getElementById('review-section').classList.remove('hidden');
+            } else {
+                warning.classList.remove('hidden');
+            }
+        }
+
+        // Funktion zum Löschen von Kommentaren
+        function deleteComment(id) {
+            const review = document.getElementById(id);
+            if (review) {
+                review.remove();
+            }
+        }
+    </script>
+</body>
+</html>
