@@ -1,8 +1,108 @@
-<script src="https://utteranc.es/client.js"
-        repo="DEINBENUTZERNAME/DEINREPOSITORY"
-        issue-term="pathname"
-        label="Kommentare"
-        theme="github-light"
-        crossorigin="anonymous"
-        async>
-</script>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin-Kommentarverwaltung</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .comment {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+        .warning {
+            color: red;
+        }
+        .button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .button:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin-Bereich: Kommentare verwalten</h1>
+
+    <!-- Passwortbereich -->
+    <div id="password-section">
+        <label for="password">Admin-Passwort:</label>
+        <input type="password" id="password">
+        <button onclick="checkPassword()">Login</button>
+        <p id="login-warning" class="warning hidden">Falsches Passwort!</p>
+    </div>
+
+    <!-- Kommentarbereich -->
+    <div id="comments-section" class="hidden">
+        <h2>Liste der Kommentare</h2>
+        <div id="comments"></div>
+    </div>
+
+    <script>
+        // Festgelegtes Admin-Passwort
+        const adminPassword = "admin123"; // Ändere hier das Passwort
+
+        // DUMMY-Kommentare in den Speicher laden (nur für Testzwecke, falls keine vorhanden sind)
+        if (!localStorage.getItem('comments')) {
+            const initialComments = [
+                { id: 1, username: "User1", comment: "Das ist ein toller Kommentar!" },
+                { id: 2, username: "User2", comment: "Sehr hilfreich, danke!" },
+                { id: 3, username: "User3", comment: "Interessanter Beitrag!" }
+            ];
+            localStorage.setItem('comments', JSON.stringify(initialComments));
+        }
+
+        // Funktion: Kommentare aus localStorage laden und anzeigen
+        function loadComments() {
+            const comments = JSON.parse(localStorage.getItem('comments')) || [];
+            const commentsSection = document.getElementById('comments');
+            commentsSection.innerHTML = ''; // Vorhandene Inhalte löschen
+            comments.forEach((comment) => {
+                const commentDiv = document.createElement('div');
+                commentDiv.className = 'comment';
+                commentDiv.id = `comment-${comment.id}`;
+                commentDiv.innerHTML = `
+                    <strong>${comment.username}:</strong>
+                    <p>${comment.comment}</p>
+                    <button class="button" onclick="deleteComment(${comment.id})">Löschen</button>
+                `;
+                commentsSection.appendChild(commentDiv);
+            });
+        }
+
+        // Funktion: Kommentar löschen
+        function deleteComment(id) {
+            let comments = JSON.parse(localStorage.getItem('comments')) || [];
+            comments = comments.filter(comment => comment.id !== id); // Filtert den Kommentar heraus
+            localStorage.setItem('comments', JSON.stringify(comments)); // Speicher aktualisieren
+            loadComments(); // Kommentare neu laden
+        }
+
+        // Passwortprüfung
+        function checkPassword() {
+            const enteredPassword = document.getElementById('password').value;
+            const warning = document.getElementById('login-warning');
+            if (enteredPassword === adminPassword) {
+                document.getElementById('password-section').classList.add('hidden');
+                document.getElementById('comments-section').classList.remove('hidden');
+                loadComments(); // Kommentare anzeigen
+            } else {
+                warning.classList.remove('hidden');
+            }
+        }
+
+        // Seite laden: Dummy-Kommentare anzeigen
+        window.onload = loadComments;
+    </script>
+</body>
+</html>
