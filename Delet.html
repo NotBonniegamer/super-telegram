@@ -13,21 +13,15 @@
             display: none;
         }
         .container {
-            max-width: 600px;
+            max-width: 400px;
             margin: 0 auto;
-        }
-        .issue-content {
-            border: 1px solid #ddd;
-            padding: 15px;
-            background-color: #f9f9f9;
-            margin-top: 15px;
-            border-radius: 5px;
+            text-align: center;
         }
         .button {
             background-color: #4CAF50;
             color: white;
             border: none;
-            padding: 8px 12px;
+            padding: 10px 20px;
             cursor: pointer;
             border-radius: 4px;
         }
@@ -43,63 +37,29 @@
 <body>
     <div class="container">
         <h1>Admin-Bereich</h1>
+        <p>Bitte Admin-Code eingeben, um die Seite zu öffnen:</p>
 
-        <!-- Passwortabfrage -->
-        <div id="auth-section">
-            <label for="admin-password">Admin-Code eingeben:</label>
-            <input type="password" id="admin-password">
-            <button class="button" onclick="verifyPassword()">Bestätigen</button>
-            <p id="warning" class="warning hidden">Falscher Admin-Code!</p>
-        </div>
-
-        <!-- GitHub Issue Bereich -->
-        <div id="issue-section" class="hidden">
-            <h2>GitHub Issue-Inhalt</h2>
-            <div id="issue-content" class="issue-content">Lade Inhalt...</div>
-        </div>
+        <!-- Passwortfeld -->
+        <input type="password" id="admin-password" placeholder="Admin-Code" />
+        <button class="button" onclick="verifyPassword()">Bestätigen</button>
+        <p id="warning" class="warning hidden">Falscher Admin-Code!</p>
     </div>
 
     <script>
-        // Admin-Code, den du festlegen kannst
-        const adminCode = "admin123";
+        // Admin-Code definieren
+        const adminCode = "supersecret";
 
-        // GitHub API Details
-        const owner = "NotBonniegamer";
-        const repo = "super-telegram";
-        const issueNumber = 1; // Issue-Nummer
-        const apiUrl = `https://api.github.com/repos/${owner}/${repo}/issues/${issueNumber}`;
-
-        // Admin-Code prüfen
+        // Funktion zur Überprüfung des Admin-Codes
         function verifyPassword() {
             const enteredPassword = document.getElementById("admin-password").value;
             const warning = document.getElementById("warning");
+            
             if (enteredPassword === adminCode) {
-                document.getElementById("auth-section").classList.add("hidden");
-                document.getElementById("issue-section").classList.remove("hidden");
-                loadIssue();
+                // Richtiges Passwort: Website öffnen
+                window.open("https://github.com/NotBonniegamer/super-telegram/issues/1", "_blank");
             } else {
+                // Falsches Passwort: Warnung anzeigen
                 warning.classList.remove("hidden");
-            }
-        }
-
-        // GitHub Issue laden
-        async function loadIssue() {
-            const issueContentDiv = document.getElementById("issue-content");
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) {
-                    throw new Error("Fehler beim Laden des Issues.");
-                }
-                const issueData = await response.json();
-
-                // Issue-Inhalt anzeigen
-                issueContentDiv.innerHTML = `
-                    <h3>${issueData.title}</h3>
-                    <p>${issueData.body ? issueData.body : "Kein Inhalt vorhanden."}</p>
-                    <p><strong>Status:</strong> ${issueData.state}</p>
-                `;
-            } catch (error) {
-                issueContentDiv.innerHTML = `<p style="color: red;">${error.message}</p>`;
             }
         }
     </script>
