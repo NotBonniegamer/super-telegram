@@ -18,7 +18,7 @@
 </head>
 <body>
     <h1>Kundenkommentare</h1>
-    
+
     <!-- Passwortbereich -->
     <div id="password-section">
         <label for="password">Admin-Passwort:</label>
@@ -29,26 +29,39 @@
 
     <!-- Kommentarliste -->
     <div id="review-section" class="hidden">
-        <div class="review" id="review1">
-            <strong>Benutzer 1:</strong>
-            <p>Tolle Erfahrung!</p>
-            <button onclick="deleteComment('review1')">Löschen</button>
-        </div>
-        <div class="review" id="review2">
-            <strong>Benutzer 2:</strong>
-            <p>Sehr zufrieden!</p>
-            <button onclick="deleteComment('review2')">Löschen</button>
-        </div>
-        <div class="review" id="review3">
-            <strong>Benutzer 3:</strong>
-            <p>Kann ich nur empfehlen!</p>
-            <button onclick="deleteComment('review3')">Löschen</button>
-        </div>
+        <div id="reviews"></div>
     </div>
 
     <script>
         // Festgelegtes Passwort
         const adminPassword = "admin123"; // Ändere hier das Passwort
+
+        // Funktion: Bestehende Bewertungen laden
+        function loadReviews() {
+            const reviews = JSON.parse(localStorage.getItem('reviews')) || [];
+            const reviewSection = document.getElementById('reviews');
+            reviewSection.innerHTML = ''; // Alte Inhalte leeren
+
+            reviews.forEach((review, index) => {
+                const reviewDiv = document.createElement('div');
+                reviewDiv.className = 'review';
+                reviewDiv.id = `review${index}`;
+                reviewDiv.innerHTML = `
+                    <strong>${review.username}:</strong>
+                    <p>${review.feedback}</p>
+                    <button onclick="deleteComment(${index})">Löschen</button>
+                `;
+                reviewSection.appendChild(reviewDiv);
+            });
+        }
+
+        // Funktion: Neue Bewertung löschen
+        function deleteComment(index) {
+            let reviews = JSON.parse(localStorage.getItem('reviews')) || [];
+            reviews.splice(index, 1); // Entfernt die Bewertung aus dem Array
+            localStorage.setItem('reviews', JSON.stringify(reviews)); // Speichert das Array erneut
+            loadReviews(); // Kommentare neu laden
+        }
 
         // Passwortprüfung
         function checkPassword() {
@@ -57,18 +70,14 @@
             if (enteredPassword === adminPassword) {
                 document.getElementById('password-section').classList.add('hidden');
                 document.getElementById('review-section').classList.remove('hidden');
+                loadReviews(); // Bewertungen anzeigen
             } else {
                 warning.classList.remove('hidden');
             }
         }
 
-        // Funktion zum Löschen von Kommentaren
-        function deleteComment(id) {
-            const review = document.getElementById(id);
-            if (review) {
-                review.remove();
-            }
-        }
+        // Initial lädt die Bewertungen
+        window.onload = loadReviews;
     </script>
 </body>
 </html>
