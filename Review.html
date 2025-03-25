@@ -1,65 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Kundenbewertungen</title>
-    <style>
-        .review {
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-    </style>
+    <title>Kundenkommentare</title>
 </head>
 <body>
-    <h1>Kundenbewertungen</h1>
+    <h1>Willkommen auf meiner Website!</h1>
+    <p>Hinterlasse hier deine Kommentare:</p>
 
-    <!-- Liste der Bewertungen -->
-    <div id="reviews"></div>
-
-    <!-- Formular für neue Bewertungen -->
-    <h2>Neue Bewertung hinzufügen:</h2>
-    <form id="reviewForm">
-        <label for="username">Dein Name:</label>
-        <input type="text" id="username" required><br><br>
-
-        <label for="feedback">Deine Bewertung:</label><br>
-        <textarea id="feedback" rows="4" cols="50" required></textarea><br><br>
-
-        <button type="button" onclick="addReview()">Bewertung hinzufügen</button>
-    </form>
-
-    <script>
-        // Funktion: Bestehende Bewertungen aus localStorage laden
-        function loadReviews() {
-            const reviews = JSON.parse(localStorage.getItem('reviews')) || [];
-            const reviewSection = document.getElementById('reviews');
-            reviewSection.innerHTML = ''; // Alte Inhalte leeren
-            reviews.forEach(review => {
-                const newReview = document.createElement('div');
-                newReview.className = 'review';
-                newReview.innerHTML = `<strong>${review.username}:</strong><p>${review.feedback}</p>`;
-                reviewSection.appendChild(newReview);
-            });
-        }
-
-        // Funktion: Neue Bewertung hinzufügen
-        function addReview() {
-            const username = document.getElementById('username').value;
-            const feedback = document.getElementById('feedback').value;
-
-            if (username && feedback) {
-                const reviews = JSON.parse(localStorage.getItem('reviews')) || [];
-                reviews.push({ username, feedback }); // Neue Bewertung speichern
-                localStorage.setItem('reviews', JSON.stringify(reviews)); // localStorage aktualisieren
-                loadReviews(); // Bewertungen erneut laden
-                document.getElementById('reviewForm').reset(); // Formular leeren
-            } else {
-                alert('Bitte alle Felder ausfüllen!');
-            }
-        }
-
-        // Bewertungen laden, wenn die Seite geladen wird
-        window.onload = loadReviews;
+    <!-- Kommentarfeld von Utterances -->
+    <script src="https://utteranc.es/client.js"
+            repo="DEINBENUTZERNAME/DEINREPOSITORY"
+            issue-term="pathname"
+            label="Kommentare"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
     </script>
 </body>
 </html>
