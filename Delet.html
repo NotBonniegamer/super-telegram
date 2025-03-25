@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Kundenkommentare löschen</title>
+    <title>Kundenkommentare verwalten</title>
     <style>
         .review {
             border: 1px solid #ddd;
@@ -27,25 +27,26 @@
         <p id="login-warning" class="warning hidden">Falsches Passwort!</p>
     </div>
 
-    <!-- Kommentarliste -->
+    <!-- Bereich zum Anzeigen der Kommentare -->
     <div id="review-section" class="hidden">
         <div id="reviews"></div>
     </div>
 
     <script>
-        // Festgelegtes Passwort
+        // Festgelegtes Admin-Passwort
         const adminPassword = "admin123"; // Ändere hier das Passwort
 
-        // Funktion: Bestehende Bewertungen laden
+        // Funktion: Bestehende Bewertungen aus dem localStorage laden
         function loadReviews() {
             const reviews = JSON.parse(localStorage.getItem('reviews')) || [];
             const reviewSection = document.getElementById('reviews');
-            reviewSection.innerHTML = ''; // Alte Inhalte leeren
-
+            reviewSection.innerHTML = ''; // Vorhandene Inhalte löschen
+            
+            // Bewertungen dynamisch hinzufügen
             reviews.forEach((review, index) => {
                 const reviewDiv = document.createElement('div');
                 reviewDiv.className = 'review';
-                reviewDiv.id = `review${index}`;
+                reviewDiv.id = `review-${index}`;
                 reviewDiv.innerHTML = `
                     <strong>${review.username}:</strong>
                     <p>${review.feedback}</p>
@@ -55,12 +56,12 @@
             });
         }
 
-        // Funktion: Neue Bewertung löschen
+        // Funktion: Kommentar löschen
         function deleteComment(index) {
             let reviews = JSON.parse(localStorage.getItem('reviews')) || [];
             reviews.splice(index, 1); // Entfernt die Bewertung aus dem Array
             localStorage.setItem('reviews', JSON.stringify(reviews)); // Speichert das Array erneut
-            loadReviews(); // Kommentare neu laden
+            loadReviews(); // Aktualisiert die angezeigten Bewertungen
         }
 
         // Passwortprüfung
@@ -76,7 +77,17 @@
             }
         }
 
-        // Initial lädt die Bewertungen
+        // Beispiel-Daten beim ersten Laden hinzufügen (falls keine vorhanden sind)
+        if (!localStorage.getItem('reviews')) {
+            const initialReviews = [
+                { username: "Benutzer 1", feedback: "Tolle Erfahrung!" },
+                { username: "Benutzer 2", feedback: "Sehr zufrieden!" },
+                { username: "Benutzer 3", feedback: "Kann ich nur empfehlen!" },
+            ];
+            localStorage.setItem('reviews', JSON.stringify(initialReviews));
+        }
+
+        // Beim Laden der Seite die Bewertungen anzeigen
         window.onload = loadReviews;
     </script>
 </body>
