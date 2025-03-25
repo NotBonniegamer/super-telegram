@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kundenbewertung</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .review {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Kundenbewertungen</h1>
+
+    <!-- Liste der Bewertungen -->
+    <div id="reviews">
+        <div class="review">
+            <strong>Benutzer 1:</strong>
+            <p>Tolle Erfahrung! Ich bin begeistert.</p>
+        </div>
+        <div class="review">
+            <strong>Benutzer 2:</strong>
+            <p>Sehr guter Service. Absolut empfehlenswert!</p>
+        </div>
+    </div>
+
+    <!-- Formular für neue Bewertungen -->
+    <h2>Neue Bewertung hinzufügen:</h2>
+    <form id="reviewForm">
+        <label for="username">Dein Name:</label>
+        <input type="text" id="username" required><br><br>
+
+        <label for="feedback">Deine Bewertung:</label><br>
+        <textarea id="feedback" rows="4" cols="50" required></textarea><br><br>
+
+        <button type="button" onclick="addReview()">Bewertung hinzufügen</button>
+    </form>
+
+    <script>
+        function addReview() {
+            // Holt die Eingabewerte
+            const username = document.getElementById('username').value;
+            const feedback = document.getElementById('feedback').value;
+
+            // Prüft, ob die Felder gefüllt sind
+            if (username && feedback) {
+                // Neue Bewertung erstellen
+                const reviewSection = document.getElementById('reviews');
+                const newReview = document.createElement('div');
+                newReview.className = 'review';
+                newReview.innerHTML = `<strong>${username}:</strong><p>${feedback}</p>`;
+
+                // Bewertung hinzufügen
+                reviewSection.appendChild(newReview);
+
+                // Formular leeren
+                document.getElementById('reviewForm').reset();
+            } else {
+                alert('Bitte alle Felder ausfüllen!');
+            }
+        }
+    </script>
+</body>
+</html>
