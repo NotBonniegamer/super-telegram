@@ -1,25 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
-    <title>Admin-Kommentarverwaltung</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin-Bereich</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        .comment {
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
         .hidden {
             display: none;
         }
-        .warning {
-            color: red;
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .issue-content {
+            border: 1px solid #ddd;
+            padding: 15px;
+            background-color: #f9f9f9;
+            margin-top: 15px;
+            border-radius: 5px;
         }
         .button {
-            background-color: #f44336;
+            background-color: #4CAF50;
             color: white;
             border: none;
             padding: 8px 12px;
@@ -27,82 +32,76 @@
             border-radius: 4px;
         }
         .button:hover {
-            background-color: #d32f2f;
+            background-color: #45a049;
+        }
+        .warning {
+            color: red;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>Admin-Bereich: Kommentare verwalten</h1>
+    <div class="container">
+        <h1>Admin-Bereich</h1>
 
-    <!-- Passwortbereich -->
-    <div id="password-section">
-        <label for="password">Admin-Passwort:</label>
-        <input type="password" id="password">
-        <button onclick="checkPassword()">Login</button>
-        <p id="login-warning" class="warning hidden">Falsches Passwort!</p>
-    </div>
+        <!-- Passwortabfrage -->
+        <div id="auth-section">
+            <label for="admin-password">Admin-Code eingeben:</label>
+            <input type="password" id="admin-password">
+            <button class="button" onclick="verifyPassword()">Bestätigen</button>
+            <p id="warning" class="warning hidden">Falscher Admin-Code!</p>
+        </div>
 
-    <!-- Kommentarbereich -->
-    <div id="comments-section" class="hidden">
-        <h2>Liste der Kommentare</h2>
-        <div id="comments"></div>
+        <!-- GitHub Issue Bereich -->
+        <div id="issue-section" class="hidden">
+            <h2>GitHub Issue-Inhalt</h2>
+            <div id="issue-content" class="issue-content">Lade Inhalt...</div>
+        </div>
     </div>
 
     <script>
-        // Festgelegtes Admin-Passwort
-        const adminPassword = "admin123"; // Ändere hier das Passwort
+        // Admin-Code, den du festlegen kannst
+        const adminCode = "supersecret";
 
-        // DUMMY-Kommentare in den Speicher laden (nur für Testzwecke, falls keine vorhanden sind)
-        if (!localStorage.getItem('comments')) {
-            const initialComments = [
-                { id: 1, username: "User1", comment: "Das ist ein toller Kommentar!" },
-                { id: 2, username: "User2", comment: "Sehr hilfreich, danke!" },
-                { id: 3, username: "User3", comment: "Interessanter Beitrag!" }
-            ];
-            localStorage.setItem('comments', JSON.stringify(initialComments));
-        }
+        // GitHub API Details
+        const owner = "NotBonniegamer";
+        const repo = "super-telegram";
+        const issueNumber = 1; // Issue-Nummer
+        const apiUrl = `https://api.github.com/repos/${owner}/${repo}/issues/${issueNumber}`;
 
-        // Funktion: Kommentare aus localStorage laden und anzeigen
-        function loadComments() {
-            const comments = JSON.parse(localStorage.getItem('comments')) || [];
-            const commentsSection = document.getElementById('comments');
-            commentsSection.innerHTML = ''; // Vorhandene Inhalte löschen
-            comments.forEach((comment) => {
-                const commentDiv = document.createElement('div');
-                commentDiv.className = 'comment';
-                commentDiv.id = `comment-${comment.id}`;
-                commentDiv.innerHTML = `
-                    <strong>${comment.username}:</strong>
-                    <p>${comment.comment}</p>
-                    <button class="button" onclick="deleteComment(${comment.id})">Löschen</button>
-                `;
-                commentsSection.appendChild(commentDiv);
-            });
-        }
-
-        // Funktion: Kommentar löschen
-        function deleteComment(id) {
-            let comments = JSON.parse(localStorage.getItem('comments')) || [];
-            comments = comments.filter(comment => comment.id !== id); // Filtert den Kommentar heraus
-            localStorage.setItem('comments', JSON.stringify(comments)); // Speicher aktualisieren
-            loadComments(); // Kommentare neu laden
-        }
-
-        // Passwortprüfung
-        function checkPassword() {
-            const enteredPassword = document.getElementById('password').value;
-            const warning = document.getElementById('login-warning');
-            if (enteredPassword === adminPassword) {
-                document.getElementById('password-section').classList.add('hidden');
-                document.getElementById('comments-section').classList.remove('hidden');
-                loadComments(); // Kommentare anzeigen
+        // Admin-Code prüfen
+        function verifyPassword() {
+            const enteredPassword = document.getElementById("admin-password").value;
+            const warning = document.getElementById("warning");
+            if (enteredPassword === adminCode) {
+                document.getElementById("auth-section").classList.add("hidden");
+                document.getElementById("issue-section").classList.remove("hidden");
+                loadIssue();
             } else {
-                warning.classList.remove('hidden');
+                warning.classList.remove("hidden");
             }
         }
 
-        // Seite laden: Dummy-Kommentare anzeigen
-        window.onload = loadComments;
+        // GitHub Issue laden
+        async function loadIssue() {
+            const issueContentDiv = document.getElementById("issue-content");
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error("Fehler beim Laden des Issues.");
+                }
+                const issueData = await response.json();
+
+                // Issue-Inhalt anzeigen
+                issueContentDiv.innerHTML = `
+                    <h3>${issueData.title}</h3>
+                    <p>${issueData.body ? issueData.body : "Kein Inhalt vorhanden."}</p>
+                    <p><strong>Status:</strong> ${issueData.state}</p>
+                `;
+            } catch (error) {
+                issueContentDiv.innerHTML = `<p style="color: red;">${error.message}</p>`;
+            }
+        }
     </script>
 </body>
 </html>
