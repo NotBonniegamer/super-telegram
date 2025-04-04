@@ -6,12 +6,12 @@
   <title>Site1</title>
 </head>
 
-<header style="background-color: #a3fca2;">
+<header>
   <h1>Super Telegram</h1>
 </header>
 
-<body style="background-color: #ffffff;">
-  <button onclick="window.location.href='index.html';">Homepage</button>
+<body>
+  <button class="my-button"; onclick="window.location.href='index.html';">Homepage</button>
 </body>
 
 <style>
@@ -27,6 +27,41 @@ h1 {
     }
     body {
         background-color: #ffffff;
+    }
+    /* Basis-Design für Buttons */
+    .my-button {
+        font-size: 14px; /* Schriftgröße */
+        padding: 10px 20px; /* Innenabstand */
+        background-color: #4CAF50; /* Hintergrundfarbe (Grün) */
+        color: white; /* Schriftfarbe */
+        border: none; /* Entfernt den Rahmen */
+        border-radius: 0px; /* Abgerundete Ecken */
+        cursor: pointer; /* Zeigt die Hand beim Hover */
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Leichter Schatten */
+        transition: background-color 0.3s ease, transform 0.2s ease; /* Animation */
+    }
+
+    /* Design, wenn der Button mit der Maus überfahren wird */
+    .my-button:hover {
+        background-color: #45a049; /* Dunkleres Grün */
+        transform: scale(1.05); /* Leichte Vergrößerung */
+    }
+
+    /* Design für einen gedrückten Button */
+    .my-button:active {
+        background-color: #3e8e41; /* Noch dunkleres Grün */
+        transform: scale(0.95); /* Verkleinerung bei Klick */
+    }
+
+    /* Spezielles Design für deaktivierte Buttons */
+    .my-button:disabled {
+        background-color: #ccc; /* Graue Farbe für deaktiviert */
+        color: #666; /* Schriftfarbe ändern */
+        cursor: not-allowed; /* Zeigt, dass der Button nicht klickbar ist */
+    }
+    .my-button {
+       margin-top: 20px;
+       margin-bottom: 20px
     }
 </style>
   
