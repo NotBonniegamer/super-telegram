@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin-Bereich</title>
-    <header>
-        
-    </header>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,9 +39,13 @@
             text-align: center;
             padding: 20px;
         }
+        header {
+            background-color: #a3fca2;
+        }
     </style>
 </head>
 <body>
+    <header>
     <div class="container">
         <h1>Admin-Bereich</h1>
         <p>Bitte Admin-Code eingeben, um die Seite zu öffnen:</p>
@@ -54,7 +55,7 @@
         <button class="button" onclick="verifyPassword()">Bestätigen</button>
         <p id="warning" class="warning hidden">Falscher Admin-Code!</p>
     </div>
-
+    </header>
     <script>
         // Admin-Code definieren
         const adminCode = "supersecret";
