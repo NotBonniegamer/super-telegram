@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webpostfach mit E-Mail-Funktion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        #composeSection, #inboxSection {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        textarea, input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #f0f0f0;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mein Webpostfach</h1>
+    
+    <div id="composeSection">
+        <h2>Neue Nachricht</h2>
+        <input type="text" id="recipientEmail" placeholder="Empfänger E-Mail">
+        <textarea id="emailBody" placeholder="Nachricht schreiben..."></textarea>
+        <button id="sendButton">Senden</button>
+    </div>
+    
+    <div id="inboxSection">
+        <h2>Posteingang</h2>
+        <ul id="inbox"></ul>
+    </div>
+
+    <script>
+        document.getElementById("sendButton").addEventListener("click", () => {
+            const email = document.getElementById("recipientEmail").value;
+            const body = document.getElementById("emailBody").value;
+
+            if (!email || !body) {
+                alert("Bitte alle Felder ausfüllen.");
+                return;
+            }
+
+            // E-Mail über das Backend senden
+            fetch("https://DEIN-BACKEND-URL/send-email", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ recipient: email, message: body })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("E-Mail erfolgreich gesendet!");
+                    document.getElementById("recipientEmail").value = "";
+                    document.getElementById("emailBody").value = "";
+                } else {
+                    alert("Fehler beim Senden der E-Mail.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
