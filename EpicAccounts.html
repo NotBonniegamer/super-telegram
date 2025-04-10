@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epic Games Account Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #accountList {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #333;
+            white-space: pre-wrap;
+            text-align: left;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Epic Games Account Generator</h1>
+        <button id="gmailButton">@gmail.com Konto generieren</button>
+        <button id="webdeButton">@web.de Konto generieren</button>
+        <button id="yahooButton">@yahoo.com Konto generieren</button>
+        <button id="copyButton">Alles kopieren</button>
+        <div id="accountList"></div>
+    </div>
+    <script>
+        const accountList = [];
+
+        function generateEpicAccount(domain) {
+            const email = Math.random().toString(36).substring(2, 11) + domain;
+            const password = Math.random().toString(36).substring(2, 12);
+            return { email, password };
+        }
+
+        function addAccount(domain) {
+            const account = generateEpicAccount(domain);
+            accountList.push(`Email: ${account.email} | Passwort: ${account.password}`);
+            document.getElementById("accountList").textContent = accountList.join("\n");
+        }
+
+        document.getElementById("gmailButton").addEventListener("click", function() {
+            addAccount("@gmail.com");
+        });
+
+        document.getElementById("webdeButton").addEventListener("click", function() {
+            addAccount("@web.de");
+        });
+
+        document.getElementById("yahooButton").addEventListener("click", function() {
+            addAccount("@yahoo.com");
+        });
+
+        document.getElementById("copyButton").addEventListener("click", function() {
+            const allAccounts = accountList.join("\n");
+            navigator.clipboard.writeText(allAccounts).then(() => {
+                alert("Alle generierten Konten wurden in die Zwischenablage kopiert!");
+            }).catch(err => {
+                alert("Fehler beim Kopieren: " + err);
+            });
+        });
+    </script>
+</body>
+</html>
