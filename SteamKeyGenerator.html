@@ -25,16 +25,20 @@
             border: none;
             cursor: pointer;
             border-radius: 5px;
+            margin: 10px;
         }
 
         button:hover {
             background-color: #45a049;
         }
 
-        #keyDisplay {
+        #keyList {
             margin-top: 20px;
-            font-size: 20px;
+            font-size: 16px;
             color: #333;
+            white-space: pre-wrap;
+            text-align: left;
+            display: inline-block;
         }
     </style>
 </head>
@@ -42,9 +46,12 @@
     <div class="container">
         <h1>Steam Key Generator</h1>
         <button id="generateButton">Generiere Steam-Key</button>
-        <div id="keyDisplay"></div>
+        <button id="copyButton">Alles kopieren</button>
+        <div id="keyList"></div>
     </div>
     <script>
+        const keyList = [];
+
         function generateSteamKey() {
             const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             let key = "";
@@ -60,7 +67,17 @@
 
         document.getElementById("generateButton").addEventListener("click", function() {
             const key = generateSteamKey();
-            document.getElementById("keyDisplay").textContent = key;
+            keyList.push(key);
+            document.getElementById("keyList").textContent = keyList.join("\n");
+        });
+
+        document.getElementById("copyButton").addEventListener("click", function() {
+            const allKeys = keyList.join("\n");
+            navigator.clipboard.writeText(allKeys).then(() => {
+                alert("Alle Steam-Keys wurden in die Zwischenablage kopiert!");
+            }).catch(err => {
+                alert("Fehler beim Kopieren: " + err);
+            });
         });
     </script>
 </body>
