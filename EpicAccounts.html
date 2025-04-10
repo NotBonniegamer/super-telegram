@@ -57,12 +57,12 @@
         function generateEpicAccount(domain) {
             const email = Math.random().toString(36).substring(2, 11) + domain;
             const password = Math.random().toString(36).substring(2, 12);
-            return { email, password };
+            return `${email} : ${password}`;
         }
 
         function addAccount(domain) {
             const account = generateEpicAccount(domain);
-            accountList.push(`Email: ${account.email} | Passwort: ${account.password}`);
+            accountList.push(account);
             document.getElementById("accountList").textContent = accountList.join("\n");
         }
 
